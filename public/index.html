@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101014">
+  <title>GOALPLAY — Live Football</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#"><span class="brand-mark">G</span> GOAL<span>PLAY</span></a>
+  <nav class="main-nav">
+    <a class="active" href="#home">Beranda</a>
+    <a href="#jadwal">Jadwal</a>
+    <a href="#kompetisi">Kompetisi</a>
+  </nav>
+  <div class="header-actions">
+    <button class="btn btn-outline" id="loginBtn">Masuk</button>
+    <button class="btn btn-primary" id="signupBtn">Daftar</button>
+    <button class="user-chip hidden" id="userBtn"></button>
+  </div>
+</header>
+
+<main id="home">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="eyebrow"><i class="live-dot"></i> FOOTBALL • LIVE & ON DEMAND</div>
+      <p class="hero-kicker">SATU TEMPAT UNTUK SEPAK BOLA</p>
+      <h1>Rasakan setiap<br><span>detik pertandingan.</span></h1>
+      <p class="hero-copy">Jadwal, pertandingan pilihan, dan informasi sepak bola dalam satu pengalaman.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-large" href="#jadwal">Jelajahi pertandingan →</a>
+        <button class="btn btn-glass btn-large" id="heroLogin">Buat akun gratis</button>
+      </div>
+      <p class="hero-note">Beberapa fitur memerlukan akun. Siaran hanya tersedia dari sumber resmi atau berizin.</p>
+    </div>
+    <div class="hero-stamp"><span>90</span><small>MINUTES<br>OF PASSION</small></div>
+  </section>
+
+  <section class="ticker">
+    <span class="ticker-label"><i class="live-dot"></i> MATCH CENTER</span>
+    <span>IKUTI JADWAL • SIMPAN PERTANDINGAN FAVORIT • DUKUNG TIM PILIHANMU</span>
+  </section>
+
+  <section class="section" id="jadwal">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow red">MATCH CENTER</p>
+        <h2>Pertandingan pilihan</h2>
+        <p class="muted">Jadwal dan informasi pertandingan yang tersedia.</p>
+      </div>
+      <div class="filter-row">
+        <button class="filter active" data-filter="all">Semua</button>
+        <button class="filter" data-filter="live">Live</button>
+        <button class="filter" data-filter="upcoming">Akan datang</button>
+      </div>
+    </div>
+    <div id="matchGrid" class="match-grid">
+      <div class="loading-card">Memuat pertandingan…</div>
+    </div>
+  </section>
+
+  <section class="promo">
+    <div>
+      <p class="eyebrow red">GOALPLAY MEMBER</p>
+      <h2>Lebih dekat dengan<br>pertandingan favoritmu.</h2>
+      <p class="muted">Login untuk menyimpan pertandingan, melihat favorit, dan ikut berdiskusi.</p>
+    </div>
+    <button class="btn btn-primary btn-large" id="promoSignup">Gabung gratis →</button>
+    <div class="promo-ball">⚽</div>
+  </section>
+
+  <section class="section lower-grid" id="kompetisi">
+    <div>
+      <p class="eyebrow red">EXPLORE</p>
+      <h2>Kompetisi populer</h2>
+      <div class="league-list">
+        <div class="league-item"><span class="league-icon">🏴</span><span><b>Premier League</b><small>Inggris</small></span><span class="arrow">↗</span></div>
+        <div class="league-item"><span class="league-icon">🇪🇸</span><span><b>La Liga</b><small>Spanyol</small></span><span class="arrow">↗</span></div>
+        <div class="league-item"><span class="league-icon">🇮🇹</span><span><b>Serie A</b><small>Italia</small></span><span class="arrow">↗</span></div>
+        <div class="league-item"><span class="league-icon">🇮🇩</span><span><b>Liga Indonesia</b><small>Indonesia</small></span><span class="arrow">↗</span></div>
+      </div>
+    </div>
+    <div class="member-card">
+      <div class="lock-icon">⌑</div>
+      <p class="eyebrow">KHUSUS MEMBER</p>
+      <h3>Area personalmu</h3>
+      <p class="muted">Favorit, riwayat, dan komentar tersedia setelah kamu login.</p>
+      <button class="btn btn-primary" id="memberAreaBtn">Buka area member</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <a class="brand" href="#"><span class="brand-mark">G</span> GOAL<span>PLAY</span></a>
+  <p>© <span id="year"></span> GoalPlay. Platform informasi sepak bola.</p>
+  <p class="footer-disclaimer">GoalPlay bukan pemilik hak siar pertandingan. Tautan video hanya boleh ditambahkan jika memiliki izin.</p>
+</footer>
+
+<div class="modal-backdrop hidden" id="authModal">
+  <section class="modal auth-modal" role="dialog" aria-modal="true">
+    <button class="close-btn" data-close="authModal">×</button>
+    <div class="modal-logo"><span class="brand-mark">G</span></div>
+    <p class="eyebrow red">WELCOME TO GOALPLAY</p>
+    <h2 id="authTitle">Masuk ke akunmu</h2>
+    <p class="muted" id="authSubtitle">Lanjutkan pengalaman sepak bolamu.</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-mode="login">Masuk</button>
+      <button class="auth-tab" data-mode="signup">Daftar</button>
+    </div>
+    <form id="authForm">
+      <label id="nameLabel" class="hidden">Nama tampilan<input id="displayName" type="text" placeholder="Nama kamu"></label>
+      <label>Email<input id="email" type="email" required placeholder="nama@email.com"></label>
+      <label>Password<input id="password" type="password" minlength="6" required placeholder="Minimal 6 karakter"></label>
+      <button class="btn btn-primary submit-btn" id="authSubmit" type="submit">Masuk</button>
+    </form>
+    <p class="form-message" id="authMessage"></p>
+    <p class="tiny muted">Dengan melanjutkan, kamu menyetujui penggunaan akun sesuai kebijakan situs.</p>
+  </section>
+</div>
+
+<div class="modal-backdrop hidden" id="matchModal">
+  <section class="modal match-modal">
+    <button class="close-btn" data-close="matchModal">×</button>
+    <div id="matchDetail"></div>
+  </section>
+</div>
+
+<div class="modal-backdrop hidden" id="accountModal">
+  <section class="modal account-modal">
+    <button class="close-btn" data-close="accountModal">×</button>
+    <p class="eyebrow red">MEMBER AREA</p>
+    <h2>Akun saya</h2>
+    <p class="muted" id="accountEmail"></p>
+    <div class="account-stats">
+      <div><b id="favCount">0</b><span>Pertandingan favorit</span></div>
+      <div><b>Member</b><span>Status akun</span></div>
+    </div>
+    <h3>Favorit saya</h3>
+    <div id="favoriteList" class="favorite-list"></div>
+    <button class="btn btn-outline danger-btn" id="logoutBtn">Keluar dari akun</button>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+</body>
+</html>
